@@ -419,9 +419,12 @@
   }
 
   .back-form {
-    display: flex;
+    display: none;
     gap: 8px;
     margin-top: 10px;
+  }
+  .back-form.visible {
+    display: flex;
   }
 
   .back-form .pick-input {
@@ -654,7 +657,7 @@ function updateCountdown() {
   if (diff <= 0) {
     countdownEl.textContent = 'Picks are closed';
     document.querySelectorAll('.back-btn').forEach(b => b.hidden = true);
-    document.querySelectorAll('.back-form').forEach(f => f.hidden = true);
+    document.querySelectorAll('.back-form').forEach(f => f.classList.remove('visible'));
     clearInterval(timerInterval);
     loadPicks();
     return;
@@ -671,11 +674,11 @@ updateCountdown();
 // Back button: show name input inline
 document.querySelectorAll('.back-btn').forEach(btn => {
   btn.addEventListener('click', () => {
-    document.querySelectorAll('.back-form').forEach(f => f.hidden = true);
+    document.querySelectorAll('.back-form').forEach(f => f.classList.remove('visible'));
     document.querySelectorAll('.back-btn').forEach(b => b.hidden = false);
     btn.hidden = true;
     const form = btn.nextElementSibling;
-    form.hidden = false;
+    form.classList.add('visible');
     const input = form.querySelector('.pick-input');
     const stored = getStoredPick();
     if (stored) input.value = stored.name;
@@ -728,7 +731,7 @@ function showPickedState(horseSlug) {
   const horse = FIELD.find(f => f.slug === horseSlug);
   pickConfirmed.innerHTML = `You backed <strong>${horse.name}</strong>`;
   pickConfirmed.hidden = false;
-  document.querySelectorAll('.back-form').forEach(f => f.hidden = true);
+  document.querySelectorAll('.back-form').forEach(f => f.classList.remove('visible'));
   document.querySelectorAll('.back-btn').forEach(btn => {
     btn.hidden = false;
     if (btn.dataset.horse === horseSlug) {
