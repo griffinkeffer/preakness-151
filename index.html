@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#0a0a0a">
+<title>Preakness 151 · The Field</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,500&family=Bebas+Neue&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0a0a0a;
+    --paper: #f4ecd8;
+    --paper-edge: #e8dfc7;
+    --gold: #f5c518;
+    --gold-deep: #c89b14;
+    --rule: rgba(244,236,216,0.1);
+  }
+
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--ink);
+    color: var(--paper);
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    overscroll-behavior-y: contain;
+    overflow-x: hidden;
+  }
+
+  body {
+    min-height: 100svh;
+    background:
+      radial-gradient(ellipse at 50% 0%, #1a1a1a 0%, #0a0a0a 60%),
+      var(--ink);
+    background-attachment: fixed;
+  }
+
+  /* ============ HEADER ============ */
+  .masthead {
+    padding: 28px 24px 12px;
+    text-align: center;
+    border-bottom: 1px solid rgba(245, 197, 24, 0.15);
+    position: relative;
+  }
+
+  .masthead::before {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 50%;
+    transform: translateX(-50%);
+    height: 1px;
+    width: 80px;
+    background: var(--gold);
+    box-shadow: 0 0 12px var(--gold);
+  }
+
+  .kicker {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.32em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .kicker .dot {
+    display: inline-block;
+    width: 4px;
+    height: 4px;
+    background: var(--gold);
+    border-radius: 50%;
+    margin: 0 8px;
+    vertical-align: middle;
+  }
+
+  .wordmark {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 44px;
+    letter-spacing: 0.04em;
+    line-height: 0.9;
+    color: var(--paper);
+    margin: 0;
+  }
+
+  .wordmark .ord {
+    color: var(--gold);
+    font-style: italic;
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 500;
+    font-size: 0.55em;
+    vertical-align: super;
+    letter-spacing: 0;
+    margin-left: 4px;
+  }
+
+  .sub {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 14px;
+    color: rgba(244, 236, 216, 0.6);
+    margin-top: 6px;
+  }
+
+  /* ============ NAV STRIP ============ */
+  .strip {
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    padding: 16px 24px 8px;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .strip::-webkit-scrollbar { display: none; }
+
+  .pill {
+    flex: 0 0 auto;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    padding: 6px 10px;
+    border: 1px solid rgba(245, 197, 24, 0.25);
+    border-radius: 999px;
+    color: rgba(244, 236, 216, 0.7);
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .pill.active {
+    background: var(--gold);
+    color: var(--ink);
+    border-color: var(--gold);
+  }
+
+  /* ============ CAROUSEL ============ */
+  .carousel-wrap {
+    position: relative;
+    padding: 24px 0 8px;
+  }
+
+  .carousel {
+    display: flex;
+    gap: 18px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-padding: 0 32px;
+    padding: 8px 32px 32px;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .carousel::-webkit-scrollbar { display: none; }
+
+  /* ============ CARD ============ */
+  .card {
+    flex: 0 0 calc(100vw - 80px);
+    max-width: 340px;
+    scroll-snap-align: center;
+    border-radius: 14px;
+    overflow: hidden;
+    background: #1a1a1a;
+    box-shadow:
+      0 1px 0 rgba(255,255,255,0.06) inset,
+      0 30px 60px -20px rgba(0,0,0,0.7),
+      0 10px 20px -10px rgba(0,0,0,0.5);
+  }
+
+  .card-photo {
+    aspect-ratio: 16 / 10;
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(135deg, #2d2418, #1a1a1a);
+  }
+
+  .card-photo img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .card-photo svg {
+    position: absolute;
+    bottom: 5%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 85%;
+    height: auto;
+    opacity: 0.7;
+  }
+
+  .card-photo .gradient {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,0.3) 0%, transparent 40%, transparent 60%, rgba(0,0,0,0.7) 100%);
+    pointer-events: none;
+  }
+
+  .pp-badge {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    font-family: 'Bebas Neue', sans-serif;
+    background: var(--gold);
+    color: var(--ink);
+    padding: 5px 9px 3px;
+    font-size: 20px;
+    letter-spacing: 0.05em;
+    line-height: 1;
+    border-radius: 3px;
+    z-index: 2;
+  }
+  .pp-badge small {
+    display: block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 7px;
+    letter-spacing: 0.2em;
+    margin-bottom: 2px;
+    font-weight: 700;
+  }
+
+  .odds-badge {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    color: var(--paper);
+    line-height: 1;
+    text-align: right;
+    z-index: 2;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.8);
+  }
+  .odds-badge small {
+    display: block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 7px;
+    letter-spacing: 0.2em;
+    margin-bottom: 2px;
+    color: var(--gold);
+  }
+
+  .card-body {
+    padding: 16px 18px 20px;
+  }
+
+  .card-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    letter-spacing: 0.03em;
+    line-height: 1;
+    margin: 0 0 4px;
+    color: var(--paper);
+  }
+
+  .card-tag {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 13px;
+    color: rgba(244, 236, 216, 0.5);
+    margin-bottom: 14px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--rule);
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+
+  .card-odds {
+    font-family: 'Bebas Neue', sans-serif;
+    font-style: normal;
+    font-size: 20px;
+    color: var(--gold);
+    letter-spacing: 0.04em;
+  }
+
+  .card-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px 16px;
+  }
+
+  .stat {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .stat-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(244, 236, 216, 0.4);
+    margin-bottom: 2px;
+  }
+
+  .stat-value {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 600;
+    font-size: 13px;
+    color: var(--paper);
+  }
+
+  .stat-full {
+    grid-column: 1 / -1;
+  }
+
+  .record-strip {
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 1px solid var(--rule);
+    display: flex;
+    justify-content: space-around;
+    font-family: 'Bebas Neue', sans-serif;
+  }
+  .record-strip .r {
+    text-align: center;
+  }
+  .record-strip .r .v {
+    font-size: 18px;
+    line-height: 1;
+    color: var(--paper);
+  }
+  .record-strip .r .l {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 7px;
+    letter-spacing: 0.2em;
+    color: rgba(244, 236, 216, 0.4);
+    margin-top: 3px;
+  }
+
+  /* ============ FOOTER ============ */
+  .footer {
+    text-align: center;
+    padding: 32px 24px 48px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    color: rgba(244, 236, 216, 0.35);
+    text-transform: uppercase;
+  }
+  .footer .ornament {
+    color: var(--gold);
+    margin: 0 6px;
+  }
+
+  @media (min-width: 640px) {
+    .card { flex: 0 0 360px; }
+    .wordmark { font-size: 56px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="kicker">May 17 <span class="dot"></span> Laurel Park <span class="dot"></span> 7:01 PM ET</div>
+  <h1 class="wordmark">PREAKNESS<span class="ord">CLI</span></h1>
+  <div class="sub">The 151<sup>st</sup> Run for the Black-Eyed Susans · The Field</div>
+</header>
+
+<nav class="strip" id="strip" aria-label="Post position jump"></nav>
+
+<div class="carousel-wrap">
+  <div class="carousel" id="carousel"></div>
+</div>
+
+<footer class="footer">
+  <span class="ornament">&#10038;</span> Swipe to browse the field <span class="ornament">&#10038;</span>
+</footer>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="horse-silhouette" viewBox="0 0 400 220">
+      <g fill="#1a1410">
+        <path d="M70 130 Q90 95 145 92 Q200 88 245 95 Q285 100 305 115 L325 110 Q335 108 338 118 Q340 130 325 138 L310 142 Q300 160 285 165 L275 200 Q272 212 262 212 L252 212 Q244 212 246 200 L252 168 L200 168 L195 200 Q193 212 183 212 L173 212 Q165 212 167 200 L172 165 Q140 162 110 150 Q90 142 80 138 Z"/>
+        <path d="M295 115 Q315 80 340 60 Q355 48 368 52 Q378 55 376 68 Q373 80 360 88 L355 100 Q360 105 358 110 Q355 115 348 113 L342 118 Q340 122 332 120 L320 122 Z"/>
+        <path d="M348 56 L352 42 L358 50 Z"/>
+        <path d="M295 115 Q300 95 320 88 Q310 100 305 118 Z" fill="#0a0a0a"/>
+        <path d="M75 130 Q50 135 35 155 Q42 152 55 148 Q48 165 38 178 Q55 168 70 158 Q60 175 55 185 Q72 170 82 158 Z" fill="#0a0a0a"/>
+        <rect x="186" y="165" width="8" height="48" rx="2"/>
+        <rect x="262" y="165" width="8" height="48" rx="2"/>
+        <path d="M170 168 Q150 180 130 200 L138 205 Q160 188 178 175 Z"/>
+        <path d="M250 170 Q240 195 232 210 L240 212 Q252 198 260 178 Z"/>
+        <rect x="184" y="208" width="12" height="4" fill="#000"/>
+        <rect x="260" y="208" width="12" height="4" fill="#000"/>
+        <circle cx="358" cy="74" r="1.6" fill="#f5c518"/>
+      </g>
+      <g transform="translate(180,55)">
+        <ellipse cx="40" cy="35" rx="36" ry="22" fill="#c8102e"/>
+        <ellipse cx="22" cy="20" rx="14" ry="13" fill="#1a1410"/>
+        <path d="M14 18 Q22 8 32 14 L30 22 Q22 18 14 22 Z" fill="#f5c518"/>
+        <rect x="20" y="32" width="10" height="14" fill="#f5c518"/>
+      </g>
+    </symbol>
+  </defs>
+</svg>
+
+<script>
+const FIELD = [
+  { pp: 1, name: "Taj Mahal", slug: "taj-mahal", odds: "5-1", trainer: "Brittany Russell", jockey: "Sheldon Russell", style: "Pacesetter", styleDesc: "Wants the lead.", record: "3-3-0-0", silk: "#003478" },
+  { pp: 2, name: "Ocelli", slug: "ocelli", odds: "6-1", trainer: "Whit Beckman", jockey: "Tyler Gaffalione", style: "Closer", styleDesc: "Rallies from far back.", record: "7-0-1-4", silk: "#c8102e" },
+  { pp: 3, name: "Crupper", slug: "crupper", odds: "30-1", trainer: "Donnie Von Hemel", jockey: "Junior Alvarado", style: "Presser", styleDesc: "Sits just off the lead.", record: "6-2-0-3", silk: "#0a8c4a" },
+  { pp: 4, name: "Robusta", slug: "robusta", odds: "30-1", trainer: "Doug O'Neill", jockey: "Rafael Bejarano", style: "Presser", styleDesc: "Sits just off the lead.", record: "6-1-1-0", silk: "#dd1a32" },
+  { pp: 5, name: "Talkin", slug: "talkin", odds: "20-1", trainer: "Danny Gargan", jockey: "Irad Ortiz Jr.", style: "Stalker", styleDesc: "Sits mid-pack, angles out late.", record: "5-1-1-1", silk: "#f5c518" },
+  { pp: 6, name: "Chip Honcho", slug: "chip-honcho", odds: "5-1", trainer: "Steve Asmussen", jockey: "Jose Ortiz", style: "Presser", styleDesc: "Sits just off the lead.", record: "6-2-2-0", silk: "#5a2d82" },
+  { pp: 7, name: "The Hell We Did", slug: "the-hell-we-did", odds: "15-1", trainer: "Todd Fincher", jockey: "Luis Saez", style: "Stalker", styleDesc: "Sits mid-pack, angles out late.", record: "4-2-2-0", silk: "#f5c518" },
+  { pp: 8, name: "Bull by the Horns", slug: "bull-by-the-horns", odds: "30-1", trainer: "Saffie Joseph Jr.", jockey: "Micah Husbands", style: "Closer", styleDesc: "Rallies from far back.", record: "5-2-0-2", silk: "#5a2d82" },
+  { pp: 9, name: "Iron Honor", slug: "iron-honor", odds: "9-2", trainer: "Chad Brown", jockey: "Flavien Prat", style: "Presser", styleDesc: "Sits just off the lead.", record: "3-2-0-0", silk: "#1a1a1a" },
+  { pp: 10, name: "Napoleon Solo", slug: "napoleon-solo", odds: "8-1", trainer: "Chad Summers", jockey: "Paco Lopez", style: "Pacesetter", styleDesc: "Wants the lead.", record: "4-2-0-0", silk: "#0a8c4a" },
+  { pp: 11, name: "Corona de Oro", slug: "corona-de-oro", odds: "30-1", trainer: "Dallas Stewart", jockey: "John Velazquez", style: "Pacesetter", styleDesc: "Wants the lead.", record: "5-1-1-2", silk: "#c89b14" },
+  { pp: 12, name: "Incredibolt", slug: "incredibolt", odds: "5-1", trainer: "Riley Mott", jockey: "Jaime Torres", style: "Stalker", styleDesc: "Sits mid-pack, angles out late.", record: "6-3-0-0", silk: "#c8102e" },
+  { pp: 13, name: "Great White", slug: "great-white", odds: "15-1", trainer: "John Ennis", jockey: "Alex Achard", style: "Pacesetter", styleDesc: "Wants the lead.", record: "4-2-0-0", silk: "#e8e8e8" },
+  { pp: 14, name: "Pretty Boy Miah", slug: "pretty-boy-miah", odds: "15-1", trainer: "Jeremiah Englehart", jockey: "Ricardo Santana Jr.", style: "Pacesetter", styleDesc: "Wants the lead.", record: "4-2-1-0", silk: "#003478" },
+];
+
+const carousel = document.getElementById('carousel');
+const strip = document.getElementById('strip');
+
+function shade(hex, percent) {
+  const num = parseInt(hex.replace('#',''), 16);
+  let r = Math.max(0, Math.min(255, (num >> 16) + percent));
+  let g = Math.max(0, Math.min(255, ((num >> 8) & 0xFF) + percent));
+  let b = Math.max(0, Math.min(255, (num & 0xFF) + percent));
+  return '#' + ((r<<16) | (g<<8) | b).toString(16).padStart(6, '0');
+}
+
+FIELD.forEach((h, idx) => {
+  const pill = document.createElement('button');
+  pill.className = 'pill' + (idx === 0 ? ' active' : '');
+  pill.textContent = h.pp;
+  pill.dataset.idx = idx;
+  pill.addEventListener('click', () => {
+    document.querySelectorAll('.card')[idx].scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+  });
+  strip.appendChild(pill);
+
+  const hasPic = !!h.slug;
+  const card = document.createElement('article');
+  card.className = 'card';
+  card.dataset.idx = idx;
+
+  const photoContent = hasPic
+    ? `<img src="${h.slug}-race.jpg" alt="${h.name}" style="object-position: ${h.focus || 'center'}"><div class="gradient"></div>`
+    : `<svg><use href="#horse-silhouette"/></svg><div class="gradient"></div>`;
+
+  const photoBg = hasPic ? '' : `style="background: linear-gradient(135deg, ${shade(h.silk, 20)}, ${shade(h.silk, -30)})"`;
+
+  card.innerHTML = `
+    <div class="card-photo" ${photoBg}>
+      <div class="pp-badge"><small>POST</small>${h.pp}</div>
+      ${photoContent}
+    </div>
+    <div class="card-body">
+      <h2 class="card-name">${h.name}</h2>
+      <div class="card-tag"><span>${h.style} · ${h.styleDesc}</span><span class="card-odds">${h.odds}</span></div>
+      <div class="card-stats">
+        <div class="stat"><span class="stat-label">Jockey</span><span class="stat-value">${h.jockey}</span></div>
+        <div class="stat"><span class="stat-label">Trainer</span><span class="stat-value">${h.trainer}</span></div>
+        <div class="stat stat-full"><span class="stat-label">Owner</span><span class="stat-value">${h.owner}</span></div>
+      </div>
+      <div class="record-strip">
+        <div class="r"><div class="v">${h.record.split('-')[0]}</div><div class="l">Starts</div></div>
+        <div class="r"><div class="v">${h.record.split('-')[1]}</div><div class="l">Wins</div></div>
+        <div class="r"><div class="v">${h.record.split('-')[2]}</div><div class="l">Place</div></div>
+        <div class="r"><div class="v">${h.record.split('-')[3]}</div><div class="l">Show</div></div>
+      </div>
+    </div>
+  `;
+  carousel.appendChild(card);
+});
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const idx = +e.target.dataset.idx;
+      document.querySelectorAll('.pill').forEach(p => p.classList.toggle('active', +p.dataset.idx === idx));
+    }
+  });
+}, { root: carousel, threshold: 0.7 });
+document.querySelectorAll('.card').forEach(c => observer.observe(c));
+</script>
+
+</body>
+</html>
