@@ -411,6 +411,12 @@
     opacity: 0.3;
     cursor: not-allowed;
   }
+  .back-btn.current-pick {
+    background: rgba(245, 197, 24, 0.12);
+    border-color: var(--gold);
+    cursor: default;
+    pointer-events: none;
+  }
 
   .back-form {
     display: flex;
@@ -670,7 +676,10 @@ document.querySelectorAll('.back-btn').forEach(btn => {
     btn.hidden = true;
     const form = btn.nextElementSibling;
     form.hidden = false;
-    form.querySelector('.pick-input').focus();
+    const input = form.querySelector('.pick-input');
+    const stored = getStoredPick();
+    if (stored) input.value = stored.name;
+    input.focus();
   });
 });
 
@@ -719,8 +728,17 @@ function showPickedState(horseSlug) {
   const horse = FIELD.find(f => f.slug === horseSlug);
   pickConfirmed.innerHTML = `You backed <strong>${horse.name}</strong>`;
   pickConfirmed.hidden = false;
-  document.querySelectorAll('.back-btn').forEach(b => b.hidden = true);
   document.querySelectorAll('.back-form').forEach(f => f.hidden = true);
+  document.querySelectorAll('.back-btn').forEach(btn => {
+    btn.hidden = false;
+    if (btn.dataset.horse === horseSlug) {
+      btn.textContent = `Your Pick`;
+      btn.classList.add('current-pick');
+    } else {
+      btn.textContent = 'Change Pick';
+    }
+  });
+  document.querySelectorAll('.card').forEach(c => c.classList.remove('picked'));
   const cards = document.querySelectorAll('.card');
   const idx = FIELD.findIndex(f => f.slug === horseSlug);
   if (idx >= 0) cards[idx].classList.add('picked');

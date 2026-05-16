@@ -22,11 +22,6 @@ export default async function handler(req, res) {
   const trimmedName = name.trim().substring(0, 30);
   if (!trimmedName) return res.status(400).json({ ok: false, error: 'Name cannot be empty' });
 
-  const existing = await kv.hget('picks', trimmedName);
-  if (existing) {
-    return res.status(409).json({ ok: false, error: 'This name has already submitted a pick' });
-  }
-
   await kv.hset('picks', { [trimmedName]: horse });
   res.json({ ok: true });
 }
