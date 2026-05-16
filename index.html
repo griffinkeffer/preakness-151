@@ -357,15 +357,7 @@
     text-transform: uppercase;
   }
 
-  .pick-input-wrap {
-    display: flex;
-    gap: 8px;
-    max-width: 300px;
-    margin: 0 auto;
-  }
-
   .pick-input {
-    flex: 1;
     font-family: 'Cormorant Garamond', serif;
     font-size: 16px;
     padding: 8px 14px;
@@ -416,6 +408,30 @@
     opacity: 0.3;
     cursor: not-allowed;
     transform: none;
+  }
+
+  .back-form {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+  }
+
+  .back-form .pick-input {
+    flex: 1;
+    font-size: 14px;
+    padding: 8px 12px;
+  }
+
+  .back-confirm {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 16px;
+    letter-spacing: 0.04em;
+    padding: 8px 16px;
+    background: var(--gold);
+    color: var(--ink);
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
   }
 
   .card.picked {
@@ -474,15 +490,13 @@
 
 <header class="masthead">
   <div class="kicker">May 17 <span class="dot"></span> Laurel Park <span class="dot"></span> 7:01 PM ET</div>
-  <h1 class="wordmark">PREAKNESS<span class="ord">CLI</span></h1>
+  <h1 class="wordmark">PREAKNESS<span class="ord">151</span></h1>
   <div class="sub">The 151<sup>st</sup> Run for the Black-Eyed Susans · The Field</div>
 </header>
 
 <div class="pick-banner" id="pick-banner">
   <div class="countdown" id="countdown"></div>
-  <div class="pick-input-wrap" id="pick-input-wrap">
-    <input type="text" class="pick-input" id="pick-name" maxlength="30" placeholder="Enter your name to pick">
-  </div>
+  <div class="pick-confirmed" id="pick-confirmed" hidden></div>
 </div>
 
 <nav class="strip" id="strip" aria-label="Post position jump"></nav>
@@ -524,20 +538,20 @@
 
 <script>
 const FIELD = [
-  { pp: 1, name: "Taj Mahal", slug: "taj-mahal", odds: "5-1", trainer: "Brittany Russell", jockey: "Sheldon Russell", style: "Pacesetter", styleDesc: "Wants the lead.", record: "3-3-0-0", silk: "#003478", peak: "Undefeated and already 3-for-3 at Laurel Park, making him the only proven local specialist in this field." },
-  { pp: 2, name: "Ocelli", slug: "ocelli", odds: "6-1", trainer: "Whit Beckman", jockey: "Tyler Gaffalione", style: "Closer", styleDesc: "Rallies from far back.", record: "7-0-1-4", silk: "#c8102e", peak: "Still a maiden after seven starts, yet he nearly stole the Kentucky Derby stretch battle and finished third at 70-1." },
-  { pp: 3, name: "Crupper", slug: "crupper", odds: "30-1", trainer: "Donnie Von Hemel", jockey: "Junior Alvarado", style: "Presser", styleDesc: "Sits just off the lead.", record: "6-2-0-3", silk: "#0a8c4a", peak: "Needed four starts to break his maiden, so this graded-stakes debut is a big jump in class." },
-  { pp: 4, name: "Robusta", slug: "robusta", odds: "30-1", trainer: "Doug O'Neill", jockey: "Rafael Bejarano", style: "Presser", styleDesc: "Sits just off the lead.", record: "6-1-1-0", silk: "#dd1a32", peak: "Best career result is a runner-up finish in the San Felipe Stakes at 68-1, so he has already outrun massive odds once." },
-  { pp: 5, name: "Talkin", slug: "talkin", odds: "20-1", trainer: "Danny Gargan", jockey: "Irad Ortiz Jr.", style: "Stalker", styleDesc: "Sits mid-pack, angles out late.", record: "5-1-1-1", silk: "#f5c518", peak: "0-for-4 in graded stakes and has been beaten a combined 41½ lengths in those tries, despite picking up Irad Ortiz Jr. here." },
-  { pp: 6, name: "Chip Honcho", slug: "chip-honcho", odds: "5-1", trainer: "Steve Asmussen", jockey: "Jose Ortiz", style: "Presser", styleDesc: "Sits just off the lead.", record: "6-2-2-0", silk: "#5a2d82", peak: "Does his best work near the front, but in each of his three starts this year he lost ground in the stretch." },
-  { pp: 7, name: "The Hell We Did", slug: "the-hell-we-did", odds: "15-1", trainer: "Todd Fincher", jockey: "Luis Saez", style: "Stalker", styleDesc: "Sits mid-pack, angles out late.", record: "4-2-2-0", silk: "#f5c518", peak: "Was 2-for-3 sprinting before stretching out and finishing second in the Lexington Stakes in his two-turn debut." },
-  { pp: 8, name: "Bull by the Horns", slug: "bull-by-the-horns", odds: "30-1", trainer: "Saffie Joseph Jr.", jockey: "Micah Husbands", style: "Closer", styleDesc: "Rallies from far back.", record: "5-2-0-2", silk: "#5a2d82", peak: "Trained by Saffie Joseph Jr., but his only graded-stakes try ended in a seventh-place finish beaten 19 lengths." },
-  { pp: 9, name: "Iron Honor", slug: "iron-honor", odds: "9-2", trainer: "Chad Brown", jockey: "Flavien Prat", style: "Presser", styleDesc: "Sits just off the lead.", record: "3-2-0-0", silk: "#1a1a1a", peak: "Won his first two starts and is trained by Chad Brown, who had already won the Preakness twice entering this race." },
-  { pp: 10, name: "Napoleon Solo", slug: "napoleon-solo", odds: "8-1", trainer: "Chad Summers", jockey: "Paco Lopez", style: "Pacesetter", styleDesc: "Wants the lead.", record: "4-2-0-0", silk: "#0a8c4a", peak: "A perfect 2-for-2 at age two, including a Champagne Stakes win, but he has looked less effective in longer two-turn races this year." },
-  { pp: 11, name: "Corona de Oro", slug: "corona-de-oro", odds: "30-1", trainer: "Dallas Stewart", jockey: "John Velazquez", style: "Pacesetter", styleDesc: "Wants the lead.", record: "5-1-1-2", silk: "#c89b14", peak: "Only win in five starts came wire-to-wire in moderate fractions, which makes this pace setup much tougher for him." },
-  { pp: 12, name: "Incredibolt", slug: "incredibolt", odds: "5-1", trainer: "Riley Mott", jockey: "Jaime Torres", style: "Stalker", styleDesc: "Sits mid-pack, angles out late.", record: "6-3-0-0", silk: "#c8102e", peak: "Owns the field's best late-pace numbers and is the only horse in this lineup with a graded-stakes win around two turns." },
-  { pp: 13, name: "Great White", slug: "great-white", odds: "15-1", trainer: "John Ennis", jockey: "Alex Achard", style: "Pacesetter", styleDesc: "Wants the lead.", record: "4-2-0-0", silk: "#e8e8e8", peak: "Was scratched at the Kentucky Derby gate after rearing up and falling, though fortunately neither he nor his rider were seriously injured." },
-  { pp: 14, name: "Pretty Boy Miah", slug: "pretty-boy-miah", odds: "15-1", trainer: "Jeremiah Englehart", jockey: "Ricardo Santana Jr.", style: "Pacesetter", styleDesc: "Wants the lead.", record: "4-2-1-0", silk: "#003478", peak: "Has never raced beyond a mile, so the big question is whether his obvious sprint speed can stretch that far." },
+  { pp: 1, name: "Taj Mahal", slug: "taj-mahal", odds: "5-1", trainer: "Brittany Russell", jockey: "Sheldon Russell", style: "Pacesetter", styleDesc: "Wants the lead.", record: "3-3-0-0", silk: "#cc0000", numColor: "#fff", peak: "Undefeated and already 3-for-3 at Laurel Park, making him the only proven local specialist in this field." },
+  { pp: 2, name: "Ocelli", slug: "ocelli", odds: "6-1", trainer: "Whit Beckman", jockey: "Tyler Gaffalione", style: "Closer", styleDesc: "Rallies from far back.", record: "7-0-1-4", silk: "#ffffff", numColor: "#000", peak: "Still a maiden after seven starts, yet he nearly stole the Kentucky Derby stretch battle and finished third at 70-1." },
+  { pp: 3, name: "Crupper", slug: "crupper", odds: "30-1", trainer: "Donnie Von Hemel", jockey: "Junior Alvarado", style: "Presser", styleDesc: "Sits just off the lead.", record: "6-2-0-3", silk: "#0000cc", numColor: "#fff", peak: "Needed four starts to break his maiden, so this graded-stakes debut is a big jump in class." },
+  { pp: 4, name: "Robusta", slug: "robusta", odds: "30-1", trainer: "Doug O'Neill", jockey: "Rafael Bejarano", style: "Presser", styleDesc: "Sits just off the lead.", record: "6-1-1-0", silk: "#ffee00", numColor: "#000", peak: "Best career result is a runner-up finish in the San Felipe Stakes at 68-1, so he has already outrun massive odds once." },
+  { pp: 5, name: "Talkin", slug: "talkin", odds: "20-1", trainer: "Danny Gargan", jockey: "Irad Ortiz Jr.", style: "Stalker", styleDesc: "Sits mid-pack, angles out late.", record: "5-1-1-1", silk: "#008000", numColor: "#fff", peak: "0-for-4 in graded stakes and has been beaten a combined 41½ lengths in those tries, despite picking up Irad Ortiz Jr. here." },
+  { pp: 6, name: "Chip Honcho", slug: "chip-honcho", odds: "5-1", trainer: "Steve Asmussen", jockey: "Jose Ortiz", style: "Presser", styleDesc: "Sits just off the lead.", record: "6-2-2-0", silk: "#000000", numColor: "#ffee00", peak: "Does his best work near the front, but in each of his three starts this year he lost ground in the stretch." },
+  { pp: 7, name: "The Hell We Did", slug: "the-hell-we-did", odds: "15-1", trainer: "Todd Fincher", jockey: "Luis Saez", style: "Stalker", styleDesc: "Sits mid-pack, angles out late.", record: "4-2-2-0", silk: "#ff6600", numColor: "#000", peak: "Was 2-for-3 sprinting before stretching out and finishing second in the Lexington Stakes in his two-turn debut." },
+  { pp: 8, name: "Bull by the Horns", slug: "bull-by-the-horns", odds: "30-1", trainer: "Saffie Joseph Jr.", jockey: "Micah Husbands", style: "Closer", styleDesc: "Rallies from far back.", record: "5-2-0-2", silk: "#ff69b4", numColor: "#000", peak: "Trained by Saffie Joseph Jr., but his only graded-stakes try ended in a seventh-place finish beaten 19 lengths." },
+  { pp: 9, name: "Iron Honor", slug: "iron-honor", odds: "9-2", trainer: "Chad Brown", jockey: "Flavien Prat", style: "Presser", styleDesc: "Sits just off the lead.", record: "3-2-0-0", silk: "#00cccc", numColor: "#000", peak: "Won his first two starts and is trained by Chad Brown, who had already won the Preakness twice entering this race." },
+  { pp: 10, name: "Napoleon Solo", slug: "napoleon-solo", odds: "8-1", trainer: "Chad Summers", jockey: "Paco Lopez", style: "Pacesetter", styleDesc: "Wants the lead.", record: "4-2-0-0", silk: "#660099", numColor: "#fff", peak: "A perfect 2-for-2 at age two, including a Champagne Stakes win, but he has looked less effective in longer two-turn races this year." },
+  { pp: 11, name: "Corona de Oro", slug: "corona-de-oro", odds: "30-1", trainer: "Dallas Stewart", jockey: "John Velazquez", style: "Pacesetter", styleDesc: "Wants the lead.", record: "5-1-1-2", silk: "#999999", numColor: "#cc0000", peak: "Only win in five starts came wire-to-wire in moderate fractions, which makes this pace setup much tougher for him." },
+  { pp: 12, name: "Incredibolt", slug: "incredibolt", odds: "5-1", trainer: "Riley Mott", jockey: "Jaime Torres", style: "Stalker", styleDesc: "Sits mid-pack, angles out late.", record: "6-3-0-0", silk: "#66cc00", numColor: "#000", peak: "Owns the field's best late-pace numbers and is the only horse in this lineup with a graded-stakes win around two turns." },
+  { pp: 13, name: "Great White", slug: "great-white", odds: "15-1", trainer: "John Ennis", jockey: "Alex Achard", style: "Pacesetter", styleDesc: "Wants the lead.", record: "4-2-0-0", silk: "#663300", numColor: "#fff", peak: "Was scratched at the Kentucky Derby gate after rearing up and falling, though fortunately neither he nor his rider were seriously injured." },
+  { pp: 14, name: "Pretty Boy Miah", slug: "pretty-boy-miah", odds: "15-1", trainer: "Jeremiah Englehart", jockey: "Ricardo Santana Jr.", style: "Pacesetter", styleDesc: "Wants the lead.", record: "4-2-1-0", silk: "#800000", numColor: "#ffee00", peak: "Has never raced beyond a mile, so the big question is whether his obvious sprint speed can stretch that far." },
 ];
 
 const carousel = document.getElementById('carousel');
@@ -553,7 +567,7 @@ function shade(hex, percent) {
 
 FIELD.forEach((h, idx) => {
   const pill = document.createElement('button');
-  const isLight = ['#f5c518','#e8e8e8','#c89b14'].includes(h.silk);
+  const isLight = ['#ffffff','#ffee00','#ff69b4','#00cccc','#ff6600','#999999','#66cc00'].includes(h.silk);
   pill.className = 'pill' + (idx === 0 ? ' active' : '') + (isLight ? ' light-silk' : ' dark-silk');
   pill.textContent = h.pp;
   pill.dataset.idx = idx;
@@ -576,7 +590,7 @@ FIELD.forEach((h, idx) => {
 
   card.innerHTML = `
     <div class="card-photo" ${photoBg}>
-      <div class="pp-badge" style="background:${h.silk};${['#1a1a1a','#003478','#5a2d82','#0a8c4a','#c8102e','#dd1a32'].includes(h.silk) ? 'color:#fff;' : 'color:#0a0a0a;'}"><small>POST</small>${h.pp}</div>
+      <div class="pp-badge" style="background:${h.silk};color:${h.numColor};"><small>POST</small>${h.pp}</div>
       ${photoContent}
     </div>
     <div class="card-body">
@@ -593,7 +607,11 @@ FIELD.forEach((h, idx) => {
         <div class="r"><div class="v">${h.record.split('-')[2]}</div><div class="l">Place</div></div>
         <div class="r"><div class="v">${h.record.split('-')[3]}</div><div class="l">Show</div></div>
       </div>
-      <button class="back-btn" data-horse="${h.slug}" disabled>Back ${h.name}</button>
+      <button class="back-btn" data-horse="${h.slug}" data-name="${h.name}">Back ${h.name}</button>
+      <div class="back-form" hidden>
+        <input type="text" class="pick-input" maxlength="30" placeholder="Your name">
+        <button class="back-confirm" data-horse="${h.slug}">Confirm</button>
+      </div>
       <div class="card-picks" hidden></div>
     </div>
   `;
@@ -613,10 +631,8 @@ document.querySelectorAll('.card').forEach(c => observer.observe(c));
 // ============ PICKS SYSTEM ============
 const DEADLINE_MS = new Date('2026-05-17T22:40:00Z').getTime();
 const STORAGE_KEY = 'preakness151-pick';
-const pickNameInput = document.getElementById('pick-name');
-const pickBanner = document.getElementById('pick-banner');
 const countdownEl = document.getElementById('countdown');
-const inputWrap = document.getElementById('pick-input-wrap');
+const pickConfirmed = document.getElementById('pick-confirmed');
 
 function isClosed() { return Date.now() >= DEADLINE_MS; }
 
@@ -629,8 +645,8 @@ function updateCountdown() {
   const diff = DEADLINE_MS - Date.now();
   if (diff <= 0) {
     countdownEl.textContent = 'Picks are closed';
-    inputWrap.hidden = true;
     document.querySelectorAll('.back-btn').forEach(b => b.hidden = true);
+    document.querySelectorAll('.back-form').forEach(f => f.hidden = true);
     clearInterval(timerInterval);
     loadPicks();
     return;
@@ -644,18 +660,28 @@ function updateCountdown() {
 const timerInterval = setInterval(updateCountdown, 1000);
 updateCountdown();
 
-pickNameInput.addEventListener('input', () => {
-  const hasName = pickNameInput.value.trim().length > 0;
-  document.querySelectorAll('.back-btn').forEach(b => b.disabled = !hasName);
+// Back button: show name input inline
+document.querySelectorAll('.back-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.back-form').forEach(f => f.hidden = true);
+    document.querySelectorAll('.back-btn').forEach(b => b.hidden = false);
+    btn.hidden = true;
+    const form = btn.nextElementSibling;
+    form.hidden = false;
+    form.querySelector('.pick-input').focus();
+  });
 });
 
-document.querySelectorAll('.back-btn').forEach(btn => {
+// Confirm button: submit the pick
+document.querySelectorAll('.back-confirm').forEach(btn => {
   btn.addEventListener('click', async () => {
-    const name = pickNameInput.value.trim();
-    if (!name) return;
+    const form = btn.parentElement;
+    const nameInput = form.querySelector('.pick-input');
+    const name = nameInput.value.trim();
+    if (!name) { nameInput.focus(); return; }
     const horse = btn.dataset.horse;
     btn.disabled = true;
-    btn.textContent = 'Submitting...';
+    btn.textContent = '...';
 
     try {
       const res = await fetch('/api/submit', {
@@ -669,19 +695,30 @@ document.querySelectorAll('.back-btn').forEach(btn => {
         showPickedState(horse);
       } else {
         btn.textContent = data.error || 'Error';
-        setTimeout(() => { btn.textContent = `Back ${FIELD.find(f => f.slug === horse).name}`; btn.disabled = false; }, 2000);
+        btn.disabled = false;
+        setTimeout(() => { btn.textContent = 'Confirm'; }, 2000);
       }
     } catch (err) {
-      btn.textContent = 'Network error';
-      setTimeout(() => { btn.textContent = `Back ${FIELD.find(f => f.slug === horse).name}`; btn.disabled = false; }, 2000);
+      btn.textContent = 'Error';
+      btn.disabled = false;
+      setTimeout(() => { btn.textContent = 'Confirm'; }, 2000);
     }
+  });
+});
+
+// Allow Enter key to submit from name input
+document.querySelectorAll('.back-form .pick-input').forEach(input => {
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') input.parentElement.querySelector('.back-confirm').click();
   });
 });
 
 function showPickedState(horseSlug) {
   const horse = FIELD.find(f => f.slug === horseSlug);
-  inputWrap.innerHTML = `<div class="pick-confirmed">You backed <strong>${horse.name}</strong></div>`;
+  pickConfirmed.innerHTML = `You backed <strong>${horse.name}</strong>`;
+  pickConfirmed.hidden = false;
   document.querySelectorAll('.back-btn').forEach(b => b.hidden = true);
+  document.querySelectorAll('.back-form').forEach(f => f.hidden = true);
   const cards = document.querySelectorAll('.card');
   const idx = FIELD.findIndex(f => f.slug === horseSlug);
   if (idx >= 0) cards[idx].classList.add('picked');
@@ -713,7 +750,6 @@ const stored = getStoredPick();
 if (stored) {
   showPickedState(stored.horse);
 } else if (isClosed()) {
-  inputWrap.hidden = true;
   document.querySelectorAll('.back-btn').forEach(b => b.hidden = true);
   loadPicks();
 }
