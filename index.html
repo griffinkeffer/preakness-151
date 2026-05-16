@@ -388,7 +388,6 @@
 
   /* ============ BACK BUTTON ON CARDS ============ */
   .back-btn {
-    display: block;
     width: 100%;
     margin-top: 14px;
     padding: 9px 16px;
@@ -761,7 +760,8 @@ async function loadPicks() {
       const picksDiv = card.querySelector('.card-picks');
       const names = grouped[h.slug];
       if (names && names.length) {
-        picksDiv.innerHTML = `<span class="picks-label">Backed By</span><span class="picks-names">${names.join(', ')}</span>`;
+        const escaped = names.map(n => n.replace(/[<>&"]/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c]))).join(', ');
+        picksDiv.innerHTML = `<span class="picks-label">Backed By</span><span class="picks-names">${escaped}</span>`;
         picksDiv.hidden = false;
       }
     });
@@ -770,11 +770,18 @@ async function loadPicks() {
 
 // On page load: check stored pick or load picks if closed
 const stored = getStoredPick();
-if (stored) {
-  showPickedState(stored.horse);
-} else if (isClosed()) {
+if (isClosed()) {
   document.querySelectorAll('.back-btn').forEach(b => b.hidden = true);
   loadPicks();
+  if (stored) {
+    const horse = FIELD.find(f => f.slug === stored.horse);
+    if (horse) {
+      pickConfirmed.innerHTML = `You backed <strong>${horse.name}</strong>`;
+      pickConfirmed.hidden = false;
+    }
+  }
+} else if (stored) {
+  showPickedState(stored.horse);
 }
 </script>
 
