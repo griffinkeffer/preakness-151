@@ -318,9 +318,9 @@
   }
 
   .record-strip {
-    margin-top: 14px;
-    padding-top: 12px;
-    border-top: 1px solid var(--rule);
+    margin-bottom: 12px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--rule);
     display: flex;
     justify-content: space-around;
     font-family: 'Bebas Neue', sans-serif;
@@ -391,23 +391,25 @@
     display: block;
     width: 100%;
     margin-top: 14px;
-    padding: 10px 16px;
+    padding: 9px 16px;
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 18px;
+    font-size: 16px;
     letter-spacing: 0.06em;
-    background: var(--gold);
-    color: var(--ink);
-    border: none;
+    background: rgba(255,255,255,0.06);
+    color: var(--gold);
+    border: 1px solid rgba(245, 197, 24, 0.3);
     border-radius: 6px;
     cursor: pointer;
-    transition: transform 0.12s, opacity 0.2s;
+    transition: border-color 0.2s, background 0.2s;
   }
-  .back-btn:hover { transform: scale(1.02); }
-  .back-btn:active { transform: scale(0.98); }
+  .back-btn:hover {
+    border-color: var(--gold);
+    background: rgba(245, 197, 24, 0.08);
+  }
+  .back-btn:active { background: rgba(245, 197, 24, 0.15); }
   .back-btn:disabled {
     opacity: 0.3;
     cursor: not-allowed;
-    transform: none;
   }
 
   .back-form {
@@ -596,16 +598,16 @@ FIELD.forEach((h, idx) => {
     <div class="card-body">
       <h2 class="card-name">${h.name}</h2>
       <div class="card-tag"><span>${h.style} · ${h.styleDesc}</span><span class="card-odds">${h.odds}</span></div>
-      <div class="card-stats">
-        <div class="stat"><span class="stat-label">Jockey</span><span class="stat-value">${h.jockey}</span></div>
-        <div class="stat"><span class="stat-label">Trainer</span><span class="stat-value">${h.trainer}</span></div>
-        <div class="stat stat-full"><span class="stat-label">Paddock Peak</span><span class="stat-value stat-peak">${h.peak}</span></div>
-      </div>
       <div class="record-strip">
         <div class="r"><div class="v">${h.record.split('-')[0]}</div><div class="l">Starts</div></div>
         <div class="r"><div class="v">${h.record.split('-')[1]}</div><div class="l">Wins</div></div>
         <div class="r"><div class="v">${h.record.split('-')[2]}</div><div class="l">Place</div></div>
         <div class="r"><div class="v">${h.record.split('-')[3]}</div><div class="l">Show</div></div>
+      </div>
+      <div class="card-stats">
+        <div class="stat"><span class="stat-label">Jockey</span><span class="stat-value">${h.jockey}</span></div>
+        <div class="stat"><span class="stat-label">Trainer</span><span class="stat-value">${h.trainer}</span></div>
+        <div class="stat stat-full"><span class="stat-label">Paddock Peak</span><span class="stat-value stat-peak">${h.peak}</span></div>
       </div>
       <button class="back-btn" data-horse="${h.slug}" data-name="${h.name}">Back ${h.name}</button>
       <div class="back-form" hidden>
